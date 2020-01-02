@@ -1,5 +1,6 @@
 import urllib2
 import ssl
+from datetime import datetime
 from lxml import html
 
 
@@ -45,26 +46,38 @@ def update(metadata, media, lang):
     Log('Update Query: %s' % str(query))
     try:
         movie = getElementFromUrl(query).xpath('//div[@class="container"]')[0]
-        Log('Find Movie: %s' % elementToString(movie))
-        #post
-        image = movie.xpath('.//a[contains(@class,"bigImage")]')[0]
-        thumbUrl = image.get('href')
-        thumb = request(thumbUrl)
-        posterUrl = image.get('href')
-        metadata.posters[posterUrl] = Proxy.Preview(thumb)
+        #Log('Find Movie: %s' % elementToString(movie))
+	    Log('Find Movie: %s' % html.tostring(movie, encoding='UTF-8'))
 
-        #name
+        #title
         if movie.xpath('.//h3'):
             metadata.title = movie.xpath('.//h3')[0].text_content().strip()
-        #metadata.movie.xpath('.//p[contains(@class,"level has-text-grey-dark")]')[0].text_content().strip()
+        
+        
+	   #poster
+        image = movie.xpath('.//a[contains(@class,"bigImage")]')[0]
+        thumbUrl = 'https://images.weserv.nl/?url='+image.get('href')+'&w=375&h=536&fit=cover&a=right'
+        thumb = request(thumbUrl)
+        posterUrl = 'https://images.weserv.nl/?url='+image.get('href')+'&w=375&h=536&fit=cover&a=right'
+        metadata.posters[posterUrl] = Proxy.Preview(thumb)
 
         #actors
         metadata.roles.clear()
-        for actor in  movie.xpath('.//div[@id="star-div"]'):
-            elementToString(actor)
+        
+	    for actor in  movie.xpath('.//a[@class="avatar-box"]'):
             img = actor.xpath('.//img')[0]
             role = metadata.roles.new()
             role.name = img.get("title")
             role.photo = img.get("src")
-            
+            Log('Actor: %s' % role.name)
+
+	    Log('Start finding date')
+        #originally_available_at
+        #moviedate = movie.xpath('.//div[@class="info"]')
+	    moviedate = movie.xpath('.//p')[1].text_content().strip().replace('発売日: ','').replace('Release Date: ','')
+	    metadata.originally_available_at = datetime.strptime(moviedate,'%Y-%m-%d')
+	    metadata.year = metadata.originally_available_at.year
+        Log('Found Date: %s' % metadata.originally_available_at)
+
+
     except Exception as e: Log(e)
