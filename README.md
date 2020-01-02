@@ -1,3 +1,7 @@
+Install with UAS: https://github.com/ikenbe/javplex.bundle
+
+------------ FORKED FROM https://github.com/zynyhome/myplexagent.bundle ------------
+
 ### What it is
 Multiple Site JAV (Jepanese Adult Video) Metadata Agent
 Plex Metadata Agent to fetch material from Multiple Site.
