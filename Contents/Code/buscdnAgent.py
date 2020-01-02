@@ -4,7 +4,7 @@ from lxml import html
 
 
 
-SEARCH_URL = 'https://www.buscdn.life/en/search/%s'
+SEARCH_URL = 'https://www.buscdn.life/ja/search/%s'
 curID = "buscdn"
 
 def getElementFromUrl(url):
@@ -30,7 +30,7 @@ def search(query, results, media, lang):
         url=str(SEARCH_URL % query)
         for movie in getElementFromUrl(url).xpath('//a[contains(@class,"movie-box")]'):
             movieid = movie.get("href").replace('/',"_")
-            results.Append(MetadataSearchResult(id= curID + "|" + str(movieid), name=str(movieid), score=100,lang=lang))
+            results.Append(MetadataSearchResult(id= curID + "|" + str(movieid), name=str(movieid.split('ja_')[1]+" - JavBus"), score=100,lang=lang))
             
         results.Sort('score', descending=True)
         Log(results)
@@ -45,7 +45,7 @@ def update(metadata, media, lang):
     Log('Update Query: %s' % str(query))
     try:
         movie = getElementFromUrl(query).xpath('//div[@class="container"]')[0]
-        Log('Find Moive: %s' % elementToString(movie))
+        Log('Find Movie: %s' % elementToString(movie))
         #post
         image = movie.xpath('.//a[contains(@class,"bigImage")]')[0]
         thumbUrl = image.get('href')
