@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>CFBundleIdentifier</key>
-	<string>com.plexapp.agents.myflexagent</string>
+	<string>com.plexapp.agents.javplex</string>
 	<key>CFBundleExecutable</key>
 	<string>OneJav</string>
 	<key>PlexAgentAttributionText</key>
