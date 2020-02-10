@@ -16,7 +16,7 @@ def Start():
 
 class OneJavAgent(Agent.Movies):
     name = 'onejav'
-    languages = [Locale.Language.English,  Locale.Language.Japanese]
+    languages = [Locale.Language.English,  Locale.Language.Japanese,  Locale.Language.Chinese]
     primary_provider = True
     accepts_from = ['com.plexapp.agents.localmedia']
     
@@ -24,8 +24,7 @@ class OneJavAgent(Agent.Movies):
     def search(self, results, media, lang, manual):
         Log('media.name :%s' % media.name)
         file_name = media.name.replace(' ', '-')
-        file_name = re.sub('([a-Z])00','\1',file_name)
-
+	file_name = re.sub('([A-z]-?)00(\d\d\d)',r'\1\2',file_name)
 
         code_match_pattern1 = '[a-zA-Z]{2,5}[-_][0-9]{3,5}'
         code_match_pattern2 = '([a-zA-Z]{2,5})([0-9]{3,5})'
@@ -48,7 +47,6 @@ class OneJavAgent(Agent.Movies):
         avgleAgent.search(query,results,media,lang)
 
     def update(self, metadata, media, lang): 
-        buscdnAgent.update(metadata,media,lang)
         onejavAgent.update(metadata,media,lang)
         avgleAgent.update(metadata,media,lang)
-        
+        buscdnAgent.update(metadata,media,lang)
