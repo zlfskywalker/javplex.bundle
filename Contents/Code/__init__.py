@@ -1,4 +1,4 @@
-import avgleAgen
+import avgleAgent
 import onejavAgent
 import buscdnAgent
 import javbusAgent
@@ -52,4 +52,4 @@ class OneJavAgent(Agent.Movies):
         onejavAgent.update(metadata,media,lang)
         avgleAgent.update(metadata,media,lang)
         #buscdnAgent.update(metadata,media,lang)
-        javbusAggent.update(metadata,meddia,lang)
+        javbusAgent.update(metadata,meddia,lang)
