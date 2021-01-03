@@ -4,24 +4,20 @@ import re
 from datetime import datetime
 from lxml import html
 
-
-SEARCH_URL = 'https://www.javbus.com/ja/search/%s'
-curID = "javbus"
+SEARCH_URL = 'https://javdb.com/search?q=%s'
+curID = "javdb"
 
 
 def getElementFromUrl(url):
     return html.fromstring(request(url))
 
-
 def request(url):
     user_agent = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.7) Gecko/2009021910 Firefox/3.0.7'
     headers = {'User-Agent': user_agent, }
-    #Log('Search Query: %s' % url)
     request = urllib2.Request(url, headers=headers)
     ctx = ssl.create_default_context()
     ctx.check_hostname = False
     ctx.verify_mode = ssl.CERT_NONE
-    # Log(urllib2.urlopen(request,context=ctx).read())
     return urllib2.urlopen(request, context=ctx).read()
 
 
@@ -32,10 +28,11 @@ def elementToString(ele):
 def search(query, results, media, lang):
     try:
         url = str(SEARCH_URL % query)
-        for movie in getElementFromUrl(url).xpath('//a[contains(@class,"movie-box")]'):
-            movieid = movie.get("href").replace('/', "_")
+        for movie in getElementFromUrl(url).xpath('//div[contains(@class,"grid-item")]'):
+            movieid = movie.xpath('//div[contains(@class,"uid")]')
+            Log(movieid)
             results.Append(MetadataSearchResult(id=curID + "|" + str(movieid),
-                                                name=str(movieid.split('ja_')[1]+" - JavBus"), score=100, lang=lang))
+                                                name=str(movieid.split('ja_')[1]+" - JavDB"), score=100, lang=lang))
         results.Sort('score', descending=True)
         Log(results)
     except Exception as e:
@@ -77,7 +74,7 @@ def update(metadata, media, lang):
 
         # release date & year
         moviedate = movie.xpath('.//p')[1].text_content().strip().replace(
-            '発売日: ', '').replace('Release Date: ', '').replace('發行日期: ', '')
+            '???: ', '').replace('Release Date: ', '').replace('????: ', '')
         metadata.originally_available_at = datetime.strptime(
             moviedate, '%Y-%m-%d')
         metadata.year = metadata.originally_available_at.year
@@ -85,7 +82,7 @@ def update(metadata, media, lang):
 
         # studio
         studio = movie.xpath(
-            './/p')[4].text_content().strip().replace('メーカー: ', '')
+            './/p')[4].text_content().strip().replace('????: ', '')
         Log('Studio Found: %s' % studio)
         metadata.studio = studio
 

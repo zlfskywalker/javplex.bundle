@@ -5,7 +5,7 @@ from datetime import datetime
 from lxml import html
 
 
-SEARCH_URL = 'https://www.buscdn.life/ja/search/%s'
+SEARCH_URL = 'https://www.buscdn.me/ja/search/%s'
 curID = "buscdn"
 
 
@@ -16,8 +16,7 @@ def getElementFromUrl(url):
 def request(url):
     user_agent = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.7) Gecko/2009021910 Firefox/3.0.7'
     headers = {'User-Agent': user_agent, }
-    # url="https://www.buscdn.life"
-    Log('Search Query: %s' % url)
+    Log('Requesting: %s' % url)
     request = urllib2.Request(url, headers=headers)
     ctx = ssl.create_default_context()
     ctx.check_hostname = False
@@ -36,7 +35,7 @@ def search(query, results, media, lang):
         for movie in getElementFromUrl(url).xpath('//a[contains(@class,"movie-box")]'):
             movieid = movie.get("href").replace('/', "_")
             results.Append(MetadataSearchResult(id=curID + "|" + str(movieid),
-                                                name=str(movieid.split('ja_')[1]+" - JavBus"), score=100, lang=lang))
+                                                name=str(movieid.split('ja_')[1]+" - BusCDN"), score=100, lang=lang))
         results.Sort('score', descending=True)
         Log(results)
     except Exception as e:
