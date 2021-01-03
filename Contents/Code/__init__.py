@@ -1,6 +1,7 @@
-import avgleAgent
+import avgleAgen
 import onejavAgent
 import buscdnAgent
+import javbusAgent
 import re
 import ssl
 from SSLEXTRA import sslOptions
@@ -42,11 +43,13 @@ class OneJavAgent(Agent.Movies):
 
             
         Log('query keyword :%s' % query)
-        buscdnAgent.search(query,results,media,lang)
+        #buscdnAgent.search(query,results,media,lang)
         onejavAgent.search(query,results,media,lang)
         avgleAgent.search(query,results,media,lang)
+        javbusAgent.search(query,results,media,lang)
 
     def update(self, metadata, media, lang): 
         onejavAgent.update(metadata,media,lang)
         avgleAgent.update(metadata,media,lang)
-        buscdnAgent.update(metadata,media,lang)
+        #buscdnAgent.update(metadata,media,lang)
+        javbusAggent.update(metadata,meddia,lang)
