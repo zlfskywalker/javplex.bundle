@@ -6,8 +6,8 @@ from datetime import datetime
 from lxml import html
 
 
-SEARCH_URL = 'https://www.javbus.com/ja/search/%s'
-curID = "buscdn"
+SEARCH_URL = 'https://www.dmm.co.jp/search/=/searchstr=%s'
+curID = "DMM"
 
 
 def getElementFromUrl(url):
@@ -17,7 +17,6 @@ def getElementFromUrl(url):
 def request(url):
     user_agent = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.7) Gecko/2009021910 Firefox/3.0.7'
     headers = {'User-Agent': user_agent, }
-    # url="https://www.buscdn.life"
     Log('Search Query: %s' % url)
     request = urllib2.Request(url, headers=headers)
     ctx = ssl.create_default_context()
@@ -34,10 +33,13 @@ def elementToString(ele):
 def search(query, results, media, lang):
     try:
         url = str(SEARCH_URL % urllib.quote(query))
-        for movie in getElementFromUrl(url).xpath('//a[contains(@class,"movie-box")]'):
-            movieid = movie.get("href").replace('/', "__")
-            results.Append(MetadataSearchResult(id=curID + "|" + str(movieid),
-                                                name=str(movieid.split('ja__')[1]+" - JavBus"), score=100, lang=lang))
+        for movie in getElementFromUrl(url).xpath('//p[@class="tmb"]'):
+            movieurl = movie.xpath('.//a')[0].get("href").replace('/', "__")
+            moviename = movie.xpath('.//img')[0].get("alt")
+            Log("URL: %s" % movieurl)
+            Log("NAME: %s" % moviename)
+            results.Append(MetadataSearchResult(id=curID + "|" + str(movieurl),
+                                                name=str(moviename+" - DMM"), score=99, lang=lang))
         results.Sort('score', descending=True)
         Log(results)
     except Exception as e:
@@ -49,8 +51,8 @@ def update(metadata, media, lang):
         return
 
     query = str(metadata.id).split("|")[1].replace('__', '/', 4)
-    if re.search('\d{4}-\d\d-\d\d$', query):
-        query = query.replace('/ja', '')
+    #if re.search('\d{4}-\d\d-\d\d$', query):
+    #    query = query.replace('/ja', '')
     #Log('Update Query: %s' % str(query))
     try:
         movie = getElementFromUrl(query).xpath('//div[@class="container"]')[0]
@@ -61,11 +63,14 @@ def update(metadata, media, lang):
             metadata.title = movie.xpath('.//h3')[0].text_content().strip()
 
         # poster
-        imageurl = movie.xpath('.//a[contains(@class,"bigImage")]')[0].get('href')
+        image = movie.xpath('.//a[contains(@class,"bigImage")]')[0]
         thumbUrl = 'https://images.weserv.nl/?url=' + \
-          urllib.quote_plus('https://pixboost.com/api/2/img/'+ imageurl + '/asis?&auth=MTk2NjM0MDQ3MQ__') +'&w=375&h=536&fit=cover&a=right'
+            image.get('href')+'&w=375&h=536&fit=cover&a=right'
+        #https://images.weserv.nl/?url=https://pixboost.com/api/2/img/http://pics.dmm.co.jp/digital/video/ssni00190/ssni00190pl.jpg/asis?&auth=MTk2NjM0MDQ3MQ__&w=375&h=536&fit=cover&a=right
+        #https://images.weserv.nl/?url=https%3A%2F%2Fpixboost.com%2Fapi%2F2%2Fimg%2Fhttp%3A%2F%2Fpics.dmm.co.jp%2Fdigital%2Fvideo%2Fssni00190%2Fssni00190pl.jpg%2Fasis%3F%26auth%3DMTk2NjM0MDQ3MQ__&w=375&h=536&fit=cover&a=right
         thumb = request(thumbUrl)
-        posterUrl = thumbUrl
+        posterUrl = 'https://images.weserv.nl/?url=' + \
+            image.get('href')+'&w=375&h=536&fit=cover&a=right'
         metadata.posters[posterUrl] = Proxy.Preview(thumb)
 
         # actors
@@ -102,3 +107,4 @@ def update(metadata, media, lang):
 
     except Exception as e:
         Log(e)
+ 

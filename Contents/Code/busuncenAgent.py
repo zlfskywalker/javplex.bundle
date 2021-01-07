@@ -6,8 +6,8 @@ from datetime import datetime
 from lxml import html
 
 
-SEARCH_URL = 'https://www.javbus.com/ja/search/%s'
-curID = "buscdn"
+SEARCH_URL = 'https://www.javbus.com/uncensored/search/%s'
+curID = "busUnC"
 
 
 def getElementFromUrl(url):
@@ -37,7 +37,7 @@ def search(query, results, media, lang):
         for movie in getElementFromUrl(url).xpath('//a[contains(@class,"movie-box")]'):
             movieid = movie.get("href").replace('/', "__")
             results.Append(MetadataSearchResult(id=curID + "|" + str(movieid),
-                                                name=str(movieid.split('ja__')[1]+" - JavBus"), score=100, lang=lang))
+                                                name=str(movieid.split('com__')[1]+" - JavBus"), score=100, lang=lang))
         results.Sort('score', descending=True)
         Log(results)
     except Exception as e:
@@ -45,13 +45,14 @@ def search(query, results, media, lang):
 
 
 def update(metadata, media, lang):
+    Log(metadata.id)
     if curID != str(metadata.id).split("|")[0]:
         return
 
     query = str(metadata.id).split("|")[1].replace('__', '/', 4)
     if re.search('\d{4}-\d\d-\d\d$', query):
         query = query.replace('/ja', '')
-    #Log('Update Query: %s' % str(query))
+    Log('Update Query: %s' % str(query))
     try:
         movie = getElementFromUrl(query).xpath('//div[@class="container"]')[0]
         Log('Find Movie: %s' % html.tostring(movie, encoding='UTF-8'))
@@ -61,11 +62,12 @@ def update(metadata, media, lang):
             metadata.title = movie.xpath('.//h3')[0].text_content().strip()
 
         # poster
-        imageurl = movie.xpath('.//a[contains(@class,"bigImage")]')[0].get('href')
+        image = movie.xpath('.//a[contains(@class,"bigImage")]')[0]
         thumbUrl = 'https://images.weserv.nl/?url=' + \
-          urllib.quote_plus('https://pixboost.com/api/2/img/'+ imageurl + '/asis?&auth=MTk2NjM0MDQ3MQ__') +'&w=375&h=536&fit=cover&a=right'
+            image.get('href').replace("javbus.com","javcdn.pw")+'&w=375&h=536&fit=cover&a=right'
         thumb = request(thumbUrl)
-        posterUrl = thumbUrl
+        posterUrl = 'https://images.weserv.nl/?url=' + \
+            image.get('href').replace("javbus.com","javcdn.pw")+'&w=375&h=536&fit=cover&a=right'
         metadata.posters[posterUrl] = Proxy.Preview(thumb)
 
         # actors

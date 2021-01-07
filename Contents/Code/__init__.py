@@ -1,6 +1,9 @@
 import avgleAgent
 import onejavAgent
 import buscdnAgent
+import busuncenAgent
+import javdbAgent
+import dmmAgent
 import re
 import ssl
 from SSLEXTRA import sslOptions
@@ -24,7 +27,7 @@ class OneJavAgent(Agent.Movies):
     def search(self, results, media, lang, manual):
         Log('media.name :%s' % media.name)
         file_name = media.name.replace(' ', '-')
-        file_name = re.sub('([a-Z])00','\1',file_name)
+        file_name = re.sub('([a-zA-Z])00','\1',file_name)
 
 
         code_match_pattern1 = '[a-zA-Z]{2,5}[-_][0-9]{3,5}'
@@ -44,11 +47,16 @@ class OneJavAgent(Agent.Movies):
             
         Log('query keyword :%s' % query)
         buscdnAgent.search(query,results,media,lang)
+        busuncenAgent.search(query,results,media,lang)
         onejavAgent.search(query,results,media,lang)
         avgleAgent.search(query,results,media,lang)
+        javdbAgent.search(query,results,media,lang)
+        dmmAgent.search(query,results,media,lang)
 
     def update(self, metadata, media, lang): 
         buscdnAgent.update(metadata,media,lang)
+        busuncenAgent.update(metadata,media,lang)
         onejavAgent.update(metadata,media,lang)
         avgleAgent.update(metadata,media,lang)
-        
+        javdbAgent.update(metadata,media,lang)
+        dmmAgent.update(metadata,media,lang)
