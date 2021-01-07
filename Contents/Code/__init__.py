@@ -1,6 +1,5 @@
 import avgleAgent
 import onejavAgent
-import buscdnAgent
 import busuncenAgent
 import javdbAgent
 import dmmAgent
@@ -49,7 +48,6 @@ class OneJavAgent(Agent.Movies):
         buscdnAgent.search(query,results,media,lang)
         busuncenAgent.search(query,results,media,lang)
         onejavAgent.search(query,results,media,lang)
-        avgleAgent.search(query,results,media,lang)
         javdbAgent.search(query,results,media,lang)
         dmmAgent.search(query,results,media,lang)
 
@@ -57,6 +55,5 @@ class OneJavAgent(Agent.Movies):
         buscdnAgent.update(metadata,media,lang)
         busuncenAgent.update(metadata,media,lang)
         onejavAgent.update(metadata,media,lang)
-        avgleAgent.update(metadata,media,lang)
         javdbAgent.update(metadata,media,lang)
         dmmAgent.update(metadata,media,lang)
