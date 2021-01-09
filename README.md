@@ -16,7 +16,3 @@ Install with UAS - https://github.com/zynyhome/myplexagent.bundle
 FIle name must contains the ID for example 
 * Some-name-JUC-981-C.mp4
 * JUC-981.mp4
-
-### Donation [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.me/zysimplelife)
-
-If this plugin help to to orgnize your mass of files, it is welcome to donate me with what ever you like. This is of course not a requirement and we still love you anyway.
