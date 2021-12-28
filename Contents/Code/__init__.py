@@ -1,6 +1,4 @@
-import buscdnAgent
-import onejavAgent
-import javbusAgent
+
 import javdbAgent
 import re
 import ssl
@@ -43,15 +41,7 @@ class OneJavAgent(Agent.Movies):
 
             
         Log('query keyword :%s' % query)
-        buscdnAgent.search(query,results,media,lang)
-        onejavAgent.search(query,results,media,lang)
-        #avgleAgent.search(query,results,media,lang)
-        javbusAgent.search(query,results,media,lang)
         javdbAgent.search(query,results,media,lang)
 
     def update(self, metadata, media, lang): 
-        onejavAgent.update(metadata,media,lang)
-        #avgleAgent.update(metadata,media,lang)
-        buscdnAgent.update(metadata,media,lang)
-        javbusAgent.update(metadata,media,lang)
         javdbAgent.update(metadata,media,lang)
