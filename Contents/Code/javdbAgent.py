@@ -67,7 +67,7 @@ def update(metadata, media, lang):
         metadata.title = movie.xpath('.//h2')[0].text_content().strip()
 
         # poster
-        poster = movie.xpath('.//img[contains(@class,"video-cover")]')[0].get('src')
+        poster = movie.xpath('.//img[contains(@class,"video-cover")]')[0].get('src').replace('/covers', "/thumbs")
         thumbUrl = poster
         thumb = request(thumbUrl)
         posterUrl = poster
