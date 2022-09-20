@@ -37,7 +37,7 @@ def search(query, results, media, lang):
     try:
         url = str(SEARCH_URL % urllib.quote_plus(query))
         
-        for movie in getElementFromUrl(url).xpath('//div[contains(@class,"grid-item column")]'):
+        for movie in getElementFromUrl(url).xpath('//div[contains(@class,"item")]'):
             moviepath = movie.xpath('.//a')[0].get("href").replace('/', "__")
             movietitle = movie.xpath('.//a')[0].get("title")
             movieid = movie.xpath('.//div[@class="uid"]')[0].text_content()
