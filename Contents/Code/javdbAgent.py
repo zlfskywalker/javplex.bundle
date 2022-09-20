@@ -47,6 +47,8 @@ def search(query, results, media, lang):
                 resultname = curID +" "+ movieid+" "+movietitle
             results.Append(MetadataSearchResult(id=curID + "|" + str(moviepath),
                                                 name=resultname, score=95, lang=lang))
+	
+	 results.Append(MetadataSearchResult("I am here"))
         results.Sort('score', descending=True)
         Log(results)
     except Exception as e:
