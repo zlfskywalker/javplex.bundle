@@ -41,11 +41,7 @@ def search(query, results, media, lang):
         for movie in getElementFromUrl(url).xpath('//div[contains(@class,"item")]'):
             moviepath = movie.xpath('.//a')[0].get("href").replace('/', "__")
             movietitle = movie.xpath('.//a')[0].get("title")
-            movieid = movie.xpath('.//div[@class="uid"]')[0].text_content()
-            if re.search(movieid,movietitle):
-                resultname = curID +" "+ movietitle
-            else:
-                resultname = curID +" "+ movieid+" "+movietitle
+            resultname = curID +" "+ movietitle
             results.Append(MetadataSearchResult(id=curID + "|" + str(moviepath),
                                                 name=resultname, score=95, lang=lang))
 	
