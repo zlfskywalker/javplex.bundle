@@ -49,8 +49,9 @@ def search(query, results, media, lang):
             results.Append(MetadataSearchResult(id=curID + "|" + str(moviepath),
                                                 name=resultname, score=95, lang=lang))
 	
-	results.Append(MetadataSearchResult("I am here"))
+	
         results.Sort('score', descending=True)
+	Log("My Custome found log:"+e)
         Log(results)
     except Exception as e:
         Log("My Custome Error:"+e)
