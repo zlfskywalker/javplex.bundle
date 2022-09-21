@@ -14,7 +14,7 @@ def Start():
     HTTP.Headers['Cookie'] = 'cok=1'
 
 class OneJavAgent(Agent.Movies):
-    name = 'onejav'
+    name = 'javplex'
     languages = [Locale.Language.English,  Locale.Language.Japanese,  Locale.Language.Chinese]
     primary_provider = True
     accepts_from = ['com.plexapp.agents.localmedia']
