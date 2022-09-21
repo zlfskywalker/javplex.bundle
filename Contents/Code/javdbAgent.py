@@ -36,7 +36,7 @@ def search(query, results, media, lang):
     
     try:
         url = str(SEARCH_URL % urllib.quote_plus(query))
-        results.Append(MetadataSearchResult("I am here"))
+      
 	
         for movie in getElementFromUrl(url).xpath('//div[contains(@class,"movie-list")]/div[contains(@class,"item")]'):
             moviepath = movie.xpath('.//a')[0].get("href").replace('/', "__")
