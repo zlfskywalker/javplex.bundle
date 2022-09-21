@@ -51,10 +51,9 @@ def search(query, results, media, lang):
 	
 	
         results.Sort('score', descending=True)
-	Log("My Custome found log:"+e)
         Log(results)
     except Exception as e:
-        Log("My Custome Error:"+e)
+        Log('My Custome Error: %s' % e)
 
 
 def update(metadata, media, lang):
