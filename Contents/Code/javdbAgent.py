@@ -41,13 +41,14 @@ def search(query, results, media, lang):
         for movie in getElementFromUrl(url).xpath('//div[contains(@class,"item")]'):
             moviepath = movie.xpath('.//a')[0].get("href").replace('/', "__")
             movietitle = movie.xpath('.//a')[0].get("title")
+	    Log('movie title: %s' % str(movietitle))
             resultname = curID +" "+ str(movietitle)
             results.Append(MetadataSearchResult(id=curID + "|" + str(moviepath),
                                                 name=resultname, score=95, lang=lang))
 	
 	
         results.Sort('score', descending=True)
-        Log(results)
+        Log('movie found: %s' % results)
     except Exception as e:
         Log('My Custome Error: %s' % e)
 
